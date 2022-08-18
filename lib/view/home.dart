@@ -6,7 +6,7 @@ class Home extends StatelessWidget {
   Home({Key? key}) : super(key: key);
   final HomeController controller = Get.put(HomeController());
   String select = '';
-  String Sar = 'SAR  ';
+  String Sar = 'SAR';
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +85,7 @@ class Home extends StatelessWidget {
                             controller.allproduct[index]['sort_price']
                                     .toString() +
                                 Sar,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.bold),
                           ),
                           SizedBox(
