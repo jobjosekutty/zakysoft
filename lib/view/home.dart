@@ -6,6 +6,7 @@ class Home extends StatelessWidget {
   Home({Key? key}) : super(key: key);
   final HomeController controller = Get.put(HomeController());
   String select = '';
+  String Sar = 'SAR  ';
 
   @override
   Widget build(BuildContext context) {
@@ -15,17 +16,17 @@ class Home extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           onPressed: () {},
-          icon: const Icon(
+          icon: Icon(
             Icons.menu,
-            color: Colors.black,
+            color: Colors.red[800],
           ),
         ),
         actions: [
           Container(
             margin: const EdgeInsets.all(8),
-            child: const Icon(
+            child: Icon(
               Icons.search,
-              color: Colors.black,
+              color: Colors.red[800],
             ),
           ),
         ],
@@ -67,17 +68,26 @@ class Home extends StatelessWidget {
                         width: 10,
                       ),
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           SizedBox(
                             width: 150,
                             child: Text(
                               controller.allproduct[index]['name'],
+                              // ignore: prefer_const_constructors
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          Text(controller.allproduct[index]['sort_price']
-                              .toString()),
+                          Text(
+                            controller.allproduct[index]['sort_price']
+                                    .toString() +
+                                Sar,
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.bold),
+                          ),
                           SizedBox(
                             width: 175,
                             child: Text(
@@ -112,6 +122,7 @@ class Home extends StatelessWidget {
                             .products(controller.subcategoryList[index].id);
                       },
                       child: Container(
+                        width: 70,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: Colors.white,
