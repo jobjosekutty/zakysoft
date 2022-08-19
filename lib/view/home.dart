@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zakysoft/controller/home_controller.dart';
+import 'package:zakysoft/model/subcategory_model.dart';
 
 class Home extends StatelessWidget {
   Home({Key? key}) : super(key: key);
   final HomeController controller = Get.put(HomeController());
   String select = '';
   String Sar = 'SAR';
+  String click = '';
+  String subselect = '';
 
   @override
   Widget build(BuildContext context) {
@@ -52,56 +55,109 @@ class Home extends StatelessWidget {
   GetBuilder<HomeController> bottomList() {
     return GetBuilder<HomeController>(builder: ((controller) {
       return Expanded(
-        child: ListView.builder(
-            scrollDirection: Axis.vertical,
-            itemCount: controller.allproduct.length,
-            itemBuilder: (context, index) {
-              return Container(
-                  margin: const EdgeInsets.only(top: 5),
-                  height: 100,
-                  width: MediaQuery.of(context).size.width,
-                  color: Colors.white,
-                  child: Row(
-                    children: [
-                      Image.asset('assets/tomato.jpg'),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        child: click != 'subclicked'
+            ? ListView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: controller.allproduct.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                      margin: const EdgeInsets.only(top: 5),
+                      height: 100,
+                      width: MediaQuery.of(context).size.width,
+                      color: Colors.white,
+                      child: Row(
                         children: [
-                          SizedBox(
-                            width: 150,
-                            child: Text(
-                              controller.allproduct[index]['name'],
-                              // ignore: prefer_const_constructors
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                          Image.asset('assets/tomato.jpg'),
+                          const SizedBox(
+                            width: 10,
                           ),
-                          Text(
-                            controller.allproduct[index]['sort_price']
-                                    .toString() +
-                                Sar,
-                            style: const TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              SizedBox(
+                                width: 150,
+                                child: Text(
+                                  controller.allproduct[index]['name'],
+                                  // ignore: prefer_const_constructors
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              Text(
+                                controller.allproduct[index]['sort_price']
+                                        .toString() +
+                                    Sar,
+                                style: const TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                width: 175,
+                                child: Text(
+                                  controller.allproduct[index]['name_arabic']
+                                      .toString(),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              )
+                            ],
                           ),
-                          SizedBox(
-                            width: 175,
-                            child: Text(
-                              controller.allproduct[index]['name_arabic']
-                                  .toString(),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          )
                         ],
-                      ),
-                    ],
-                  ));
-            }),
+                      ));
+                })
+            : ListView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: controller.product.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                      margin: const EdgeInsets.only(top: 5),
+                      height: 100,
+                      width: MediaQuery.of(context).size.width,
+                      color: Colors.white,
+                      child: Row(
+                        children: [
+                          Image.asset('assets/tomato.jpg'),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              SizedBox(
+                                width: 150,
+                                child: Text(
+                                  controller.product[index]['name'],
+                                  // ignore: prefer_const_constructors
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              Text(
+                                controller.product[index]['sort_price']
+                                        .toString() +
+                                    Sar,
+                                style: const TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                width: 175,
+                                child: Text(
+                                  controller.product[index]['name_arabic']
+                                      .toString(),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      ));
+                }),
       );
     }));
   }
@@ -118,6 +174,9 @@ class Home extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
+                        subselect =
+                            controller.subcategoryList[index].id.toString();
+                        click = 'subclicked';
                         controller
                             .products(controller.subcategoryList[index].id);
                       },
@@ -125,7 +184,11 @@ class Home extends StatelessWidget {
                         width: 70,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
+                            color: subselect ==
+                                    controller.subcategoryList[index].id
+                                        .toString()
+                                ? Colors.green
+                                : Colors.white,
                             border: Border.all(color: Colors.black)),
                         margin: const EdgeInsets.only(
                             right: 10, left: 10, top: 5, bottom: 5),
@@ -147,7 +210,7 @@ class Home extends StatelessWidget {
     }));
   }
 
-  GetBuilder<HomeController> topCategory() {
+  topCategory() {
     return GetBuilder<HomeController>(builder: ((controller) {
       return SizedBox(
         height: 50,
@@ -155,29 +218,27 @@ class Home extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemCount: controller.categoryList.length,
             itemBuilder: (context, index) {
-              return Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color:
-                        select == controller.categoryList[index].id.toString()
-                            ? Colors.green
-                            : Colors.white,
-                    border: Border.all(color: Colors.black)),
-                margin: const EdgeInsets.only(
-                    left: 10, right: 10, top: 5, bottom: 5),
-                height: 70,
-                width: 110,
-                child: Center(
-                    child: GestureDetector(
-                        onTap: (() {
-                          select = controller.categoryList[index].id.toString();
-                          controller
-                              .subcategories(controller.categoryList[index].id);
-                          controller
-                              .allProducts(controller.categoryList[index].id);
-                        }),
-                        child: Center(
-                            child: Text(controller.categoryList[index].name)))),
+              return GestureDetector(
+                onTap: () {
+                  select = controller.categoryList[index].id.toString();
+                  controller.subcategories(controller.categoryList[index].id);
+                  controller.allProducts(controller.categoryList[index].id);
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color:
+                          select == controller.categoryList[index].id.toString()
+                              ? Colors.green
+                              : Colors.white,
+                      border: Border.all(color: Colors.black)),
+                  margin: const EdgeInsets.only(
+                      left: 10, right: 10, top: 5, bottom: 5),
+                  height: 70,
+                  width: 110,
+                  child:
+                      Center(child: Text(controller.categoryList[index].name)),
+                ),
               );
             }),
       );
